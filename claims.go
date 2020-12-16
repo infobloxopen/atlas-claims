@@ -4,7 +4,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-
 // Subject describes the authenticated entity making a request.
 type Subject struct {
 	Id                 string `json:"id,omitempty"`                // user_email if authentication_type=(user_jwt|api_key)
@@ -15,7 +14,8 @@ type Subject struct {
 
 // Claims models the claims that atlas authz cares about.
 type Claims struct {
-	UserId              string `json:"user_id,omitempty"`
+	UserId            string   `json:"user_id,omitempty"`
+	IdentityUserId    string   `json:"identity_user_id,omitempty"`
 	AccountId         string   `json:"account_id,omitempty"`
 	IdentityAccountId string   `json:"identity_account_id,omitempty"`
 	Service           string   `json:"service,omitempty"`

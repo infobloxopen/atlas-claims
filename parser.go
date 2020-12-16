@@ -1,16 +1,17 @@
 package atlas_claims
 
 import (
-	"strings"
-	"github.com/dgrijalva/jwt-go"
 	"context"
+	"strings"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 )
 
 const (
 	SetJwtHeader = "set-authorization"
-	JwtName = "bearer"
+	JwtName      = "bearer"
 )
 
 func UnverifiedClaimsFromContext(ctx context.Context) (*Claims, bool) {
@@ -58,7 +59,7 @@ func ParseUnverifiedClaimsFromJwtStringsRaw(jwtStrings []string) (validClaim *Cl
 	for _, jwtString := range jwtStrings {
 		claims := &Claims{}
 		parser := &jwt.Parser{}
-		_,_, err := parser.ParseUnverified(jwtString, claims)
+		_, _, err := parser.ParseUnverified(jwtString, claims)
 
 		// We use the most recent token
 		if err != nil {
