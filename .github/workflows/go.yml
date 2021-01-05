@@ -25,6 +25,9 @@ jobs:
       run: |
         echo "dependencies are in the vendor folder"
 
+    - name: Vendor
+      run: make vendor
+
     - name: Build
       run: make
 
