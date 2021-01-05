@@ -2,9 +2,15 @@
 SHELL := /bin/bash
 JQ    := $(shell which jq >/dev/null && echo jq || echo cat)
 
+vendor:
+	go mod tidy
+	git diff --exit-code
+
 .PHONY: test
 test:
+	go vet ./...
 	go test -v ./...
+	git diff --exit-code
 
 .PHONY: demo
 demo:
@@ -26,4 +32,3 @@ demo:
 		| tee -a /dev/stderr \
 		| cut -f2 -d. | base64 -D \
 		| awk '/}$$/{print;exit 0} {print $$0 "}"}' | $(JQ)
-
