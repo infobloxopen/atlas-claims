@@ -15,6 +15,7 @@ type Subject struct {
 // Claims models the claims that atlas authz cares about.
 type Claims struct {
 	UserId            string   `json:"user_id,omitempty"`
+	UserEmail         string   `json:"user_email,omitempty"`
 	IdentityUserId    string   `json:"identity_user_id,omitempty"`
 	AccountId         string   `json:"account_id,omitempty"`
 	IdentityAccountId string   `json:"identity_account_id,omitempty"`

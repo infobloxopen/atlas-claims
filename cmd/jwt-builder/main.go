@@ -18,6 +18,7 @@ const (
 var (
 	// default claims
 	cfgUserId                 = ""
+	cfgUserEmail              = ""
 	cfgIdentityUserId         = ""
 	cfgAccountId              = ""
 	cfgIdentityAccountId      = ""
@@ -36,6 +37,7 @@ var (
 func main() {
 	// define flag overrides
 	flag.StringVar(&cfgUserId, "user_id", cfgUserId, "user id")
+	flag.StringVar(&cfgUserEmail, "user_email", cfgUserEmail, "user email")
 	flag.StringVar(&cfgIdentityUserId, "identity_user_id", cfgIdentityUserId, "identity user id")
 	flag.StringVar(&cfgAccountId, "account_id", cfgAccountId, "account id (int)")
 	flag.StringVar(&cfgIdentityAccountId, "identity_account_id", cfgIdentityAccountId, "identity account id (guid)")
@@ -55,6 +57,7 @@ func main() {
 	cfgGroups := strings.Split(strGroups, ",")
 	claims := &atlas_claims.Claims{
 		UserId:            cfgUserId,
+		UserEmail:            cfgUserEmail,
 		IdentityUserId:    cfgIdentityUserId,
 		AccountId:         cfgAccountId,
 		IdentityAccountId: cfgIdentityAccountId,
