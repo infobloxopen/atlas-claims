@@ -1,7 +1,7 @@
 package atlas_claims
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 // Subject describes the authenticated entity making a request.
