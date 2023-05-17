@@ -2,16 +2,21 @@ package atlas_claims
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/grpc-ecosystem/go-grpc-middleware/auth"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 )
 
 const (
 	SetJwtHeader = "set-authorization"
 	JwtName      = "bearer"
+)
+
+var (
+	ErrSpireToken = errors.New("Spire tokens are not supported")
 )
 
 func UnverifiedClaimsFromContext(ctx context.Context) (*Claims, bool) {
@@ -63,6 +68,13 @@ func ParseUnverifiedClaimsFromJwtStringsRaw(jwtStrings []string) (validClaim *Cl
 
 		// We use the most recent token
 		if err != nil {
+
+			// Let's check if this is a spire token and insert a special error message
+			_, sErr := ParseUnverifiedSpireJWT(jwtString)
+			if sErr == nil {
+				err = ErrSpireToken
+			}
+
 			errList = append(errList, err)
 		} else {
 			if validClaim == nil || (claims.IssuedAt > validClaim.IssuedAt) {
