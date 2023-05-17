@@ -24,31 +24,31 @@ func BuildJwt(claims *Claims, hmacKey string, expires_duration time.Duration) (s
 	}
 
 	// standard claims
-	if claims.Issuer == "" {
-		claims.Issuer = DefaultIssuer
+	if claims.StandardClaims.Issuer == "" {
+		claims.StandardClaims.Issuer = DefaultIssuer
 	}
-	if claims.Audience == "" {
-		claims.Audience = DefaultAudience
+	if claims.StandardClaims.Audience == "" {
+		claims.StandardClaims.Audience = DefaultAudience
 	}
-	if claims.IssuedAt == 0 {
-		claims.IssuedAt = time.Now().Unix()
+	if claims.StandardClaims.IssuedAt == 0 {
+		claims.StandardClaims.IssuedAt = time.Now().Unix()
 	}
-	if claims.NotBefore == 0 {
-		claims.NotBefore = claims.IssuedAt
+	if claims.StandardClaims.NotBefore == 0 {
+		claims.StandardClaims.NotBefore = claims.StandardClaims.IssuedAt
 	}
-	if claims.ExpiresAt == 0 {
-		claims.ExpiresAt = time.Unix(claims.IssuedAt, 0).Add(expires_duration).Unix()
+	if claims.StandardClaims.ExpiresAt == 0 {
+		claims.StandardClaims.ExpiresAt = time.Unix(claims.StandardClaims.IssuedAt, 0).Add(expires_duration).Unix()
 	}
 
 	// non-standard claims
-	if claims.AccountId == "" && claims.Audience != STKAudience {
+	if claims.AccountId == "" && claims.StandardClaims.Audience != STKAudience {
 		claims.AccountId = "0"
 	}
 	if claims.Service == "" {
 		claims.Service = DefaultService
 	}
 	if claims.Subject.Id == "" {
-		claims.Subject.Id = fmt.Sprintf("service.%s.%d", claims.Service, claims.IssuedAt)
+		claims.Subject.Id = fmt.Sprintf("service.%s.%d", claims.Service, claims.StandardClaims.IssuedAt)
 	}
 	if claims.Subject.SubjectType == "" {
 		claims.Subject.SubjectType = DefaultSubjectType

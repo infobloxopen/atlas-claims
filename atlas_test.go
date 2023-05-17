@@ -1,0 +1,26 @@
+package atlas_claims
+
+import "testing"
+
+func TestAtlas(t *testing.T) {
+
+	for _, tt := range []struct {
+		raw string
+		err error
+	}{
+		{
+			raw: "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsImlkZW50aXR5X3VzZXJfaWQiOiIxMTExIiwidXNlcm5hbWUiOiJ0aG9yLm9kaW5zb25AdGhlLmdyZWF0ZXN0LmF2ZW5nZXIuY29tIiwiYWNjb3VudF9pZCI6IjEiLCJjc3BfYWNjb3VudF9pZCI6MSwiaWRlbnRpdHlfYWNjb3VudF9pZCI6IjExIiwiYWNjb3VudF9uYW1lIjoiQXZlbmdlcnMiLCJhY2NvdW50X2RvbWFpbiI6InRoZS5ncmVhdGVzdC5hdmVuZ2VyLmNvbSIsImFjY291bnRfbnVtYmVyIjoiMSIsImNvbXBhbnlfbnVtYmVyIjoxMDAwMDAwMDAsImFjY291bnRfc3RvcmFnZV9pZCI6MTA2LCJzZmRjX2FjY291bnRfaWQiOiJmYmY0NDEzN2FmYWRlZjMzMmZhIiwiZ3JvdXBzIjpbImFjdF9hZG1pbiJdLCJzdWJqZWN0Ijp7ImlkIjoidGhvci5vZGluc29uQHRoZS5ncmVhdGVzdC5hdmVuZ2VyLmNvbSIsInN1YmplY3RfdHlwZSI6InVzZXIiLCJhdXRoZW50aWNhdGlvbl90eXBlIjoidG9rZW4ifSwiYXVkIjoiYWxsIiwiZXhwIjoxNTY0NTQwOTYzLCJqdGkiOiJlZTdhMGQ0ZS0xNDc3LTRjMTAtYjQzYi00YTIxYmVlN2RkMzAiLCJpYXQiOjE1NjQ1NDA5MDMsImlzcyI6ImlkZW50aXR5IiwibmJmIjoxNTY0NTQwOTAzfQo.cCKYFjE6tT88pvd8oz9-eYSbs9FU-KKxU0eA5YO-_a8RGE_FFh5GQ1TSm4bJgEMEhjBjMJuu1QOER7W4ZMAYANWGo2-h2Es-AtxFCdlJfrBHk0SkVCr_1nVj2IW1vm6Ur3-ybTlKtb7SPYdjr3RGwkm7ZlZ23dBIEWWO-yHp0meKHbCYhZwINeG23W2JjboTbmAYiVaFEQGN52gc4ZHyB3Cbb0zm0LYutSl24u3TFl2gNpbq_Wmjeqh4tXlT7KTHso0q24jGkvWonFr95WxrOsNUR0L8Kuth1zQe0rrc-btwh66b6QgbcfpINyHyY3_UwT6KCp4HSXiAm3tgWpIJ3w",
+		},
+		{
+			raw: "eyJhbGciOiJFUzI1NiIsImtpZCI6Ikg5czlFRXg2RjZtamhxWUsxZ3Vjb3c2SXZSMXd1VlZaIiwidHlwIjoiSldUIn0.eyJhdWQiOlsiaWItY2xhaW1zIl0sImV4cCI6MTg0MTUyOTYwMCwiaWF0IjoxNjgzNzQyMTMxLCJzdWIiOiJzcGlmZmU6Ly9leGFtcGxlLm9yZy9teXNlcnZpY2UifQ.SphbHHorF3Z-IkJAavGE95BCX3vRkrigX5fO95RGTYymckFag9LOmMYLpu_78jiFCnaPh-CQxFf_FXTr_n8SRw",
+			err: ErrSpireToken,
+		},
+	} {
+		_, errs := ParseUnverifiedClaimsFromJwtStrings([]string{tt.raw})
+		for _, err := range errs {
+			if err != tt.err {
+				t.Fatal(err)
+			}
+		}
+	}
+}

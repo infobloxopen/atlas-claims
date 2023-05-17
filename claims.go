@@ -2,6 +2,7 @@ package atlas_claims
 
 import (
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/spiffe/go-spiffe/v2/svid/jwtsvid"
 )
 
 // Subject describes the authenticated entity making a request.
@@ -21,9 +22,11 @@ type Claims struct {
 	Service           string   `json:"service,omitempty"`
 	Groups            []string `json:"groups,omitempty"`
 	Subject           Subject  `json:"subject"`
+
 	jwt.StandardClaims
 }
 
-func (c Claims) Valid() error {
-	return c.StandardClaims.Valid()
+// SVID is a JWT-SVID.
+type SVID struct {
+	jwtsvid.SVID `json:",omitempty"`
 }
