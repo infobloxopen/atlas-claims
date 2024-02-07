@@ -21,6 +21,7 @@ type Claims struct {
 	Service           string   `json:"service,omitempty"`
 	Groups            []string `json:"groups,omitempty"`
 	Subject           Subject  `json:"subject"`
+	CompartmentID     string   `json:"compartment_id,omitempty"`
 	jwt.StandardClaims
 }
 
