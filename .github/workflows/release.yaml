@@ -1,0 +1,17 @@
+name: release-please
+on:
+  push:
+    branches:
+      - main
+      - please
+
+jobs:
+  release-pr:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          command: manifest
+          default-branch: main
