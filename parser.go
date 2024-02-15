@@ -2,6 +2,7 @@ package atlas_claims
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -12,6 +13,10 @@ import (
 const (
 	SetJwtHeader = "set-authorization"
 	JwtName      = "bearer"
+)
+
+var (
+	errMissingField = errors.New("unable to get field from token")
 )
 
 func UnverifiedClaimsFromContext(ctx context.Context) (*Claims, bool) {
@@ -72,4 +77,28 @@ func ParseUnverifiedClaimsFromJwtStringsRaw(jwtStrings []string) (validClaim *Cl
 		}
 	}
 	return
+}
+
+// GetAccountID will return the account ID from the context.
+func GetAccountID(ctx context.Context) (string, error) {
+	accountID := ""
+	claims, ok := UnverifiedClaimsFromContext(ctx)
+	if ok {
+		accountID = claims.AccountId
+	}
+	if !ok || accountID == "" {
+		return "", errMissingField
+	}
+	return accountID, nil
+}
+
+// GetCompartmentID will return the compartment ID from the context.
+// Defaults to empty if compartment ID claim is not present in the JWT.
+func GetCompartmentID(ctx context.Context) (string, bool) {
+	compartmentID := ""
+	claims, ok := UnverifiedClaimsFromContext(ctx)
+	if ok {
+		compartmentID = claims.CompartmentID
+	}
+	return compartmentID, ok
 }
