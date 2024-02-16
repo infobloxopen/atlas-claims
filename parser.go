@@ -102,3 +102,19 @@ func GetCompartmentID(ctx context.Context) (string, bool) {
 	}
 	return compartmentID, ok
 }
+
+// GetAccountAndCompartmentID will return the account ID and compartment ID from the context.
+// Defaults to empty compartment if compartment ID claim is not present in the JWT.
+func GetAccountAndCompartmentID(ctx context.Context) (string, string, error) {
+	accountID := ""
+	compartmentID := ""
+	claims, ok := UnverifiedClaimsFromContext(ctx)
+	if ok {
+		accountID = claims.AccountId
+		compartmentID = claims.CompartmentID
+	}
+	if !ok || accountID == "" {
+		return "", "", errMissingField
+	}
+	return accountID, compartmentID, nil
+}
