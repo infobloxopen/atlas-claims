@@ -83,6 +83,62 @@ func TestGetCompartmentID(t *testing.T) {
 	}
 }
 
+func TestGetAccountAndCompartmentID(t *testing.T) {
+	var accountIDTests = []struct {
+		claims              *Claims
+		expectedAccount     string
+		expectedCompartment string
+		err                 error
+	}{
+		{
+			claims: &Claims{
+				AccountId: "id-abc-123",
+			},
+			expectedAccount:     "id-abc-123",
+			expectedCompartment: "",
+			err:                 nil,
+		},
+		{
+			claims: &Claims{
+				AccountId:     "id-abc-123",
+				CompartmentID: "",
+			},
+			expectedAccount:     "id-abc-123",
+			expectedCompartment: "",
+			err:                 nil,
+		},
+		{
+			claims: &Claims{
+				AccountId:     "id-abc-123",
+				CompartmentID: "cmp-1",
+			},
+			expectedAccount:     "id-abc-123",
+			expectedCompartment: "cmp-1",
+			err:                 nil,
+		},
+		{
+			claims:              &Claims{},
+			expectedAccount:     "",
+			expectedCompartment: "",
+			err:                 errMissingField,
+		},
+	}
+	for _, test := range accountIDTests {
+		token := makeToken(test.claims, t)
+		ctx := contextWithToken(token, DefaultSubjectAuthType)
+		account, compartment, err := GetAccountAndCompartmentID(ctx)
+		if err != test.err {
+			t.Errorf("Invalid error value: %v - expected %v", err, test.err)
+		}
+		if account != test.expectedAccount {
+			t.Errorf("Invalid AccountID: %v - expected %v", account, test.expectedAccount)
+		}
+		if compartment != test.expectedCompartment {
+			t.Errorf("Invalid CompartmentID: %v - expected %v", compartment, test.expectedCompartment)
+		}
+	}
+}
+
 // contextWithToken creates a context with a JWT
 func contextWithToken(token, tokenType string) context.Context {
 	md := metadata.Pairs(
